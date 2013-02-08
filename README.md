@@ -1,4 +1,13 @@
-TO-DO-LIST
-==========
+testingTeam
+===========
+This is demo project to test
 
-Simple backbone.js TO-DO LIST
+
+https://help.github.com/articles/generating-ssh-keys
+
+# If you get error like this
+Agent admitted failure to sign using the key.
+Permission denied (publickey).
+
+Do ssh-add
+
