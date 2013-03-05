@@ -21,6 +21,12 @@ var Domlabel = Backbone.Model.extend({
               }
   });
 
+var ItemListName = Backbone.Model.extend({
+		defaults: {
+		  nameValue: "todoItem",
+		  visible: false
+		}
+	});
   var List = Backbone.Collection.extend({
 	model: Item	
   });
@@ -28,13 +34,11 @@ var Domlabel = Backbone.Model.extend({
 var ItemView = Backbone.View.extend({
 	tagName: 'li',
 	events: {
-	   'click span.delete': 'remove',
 	   'click span.data' : 'toggletask'
 	},
 	initialize: function(){
-		_.bindAll(this, 'render', 'unrender', 'remove', 'complete', 'incomplete', 'toggletask');
+		_.bindAll(this, 'render', 'unrender', 'complete', 'incomplete', 'toggletask');
 		this.model.bind('change', this.render);
-		this.model.bind('remove', this.unrender);
 	},
 	render: function(){
 	  $(this.el).html('<span style="color:black; cursor:pointer;" class="data">'+ this.model.get('domstart') + this.model.get('part1')+ this.model.get('domend') +'</span> &nbsp; &nbsp; &nbsp; <span class="delete" style="cursor:pointer; color:red; font-family:sans-serif;">[delete]</span>');
@@ -59,6 +63,55 @@ var ItemView = Backbone.View.extend({
 	remove: function(){
 	  this.model.destroy();	
 	}	
+});
+
+var ItemInput = Backbone.View.extend({
+	tagName : 'input',
+	initialize: function() {
+		_.bindAll(this, 'render', 'unrender');
+		this.itemDetail = new ItemListName();
+	},
+	render: function() {
+		if(!this.itemDetail.get("visible"))
+		$(this.el).hide();
+		$(this.el).attr('name', this.itemDetail.get("nameValue"));
+		$(this.el).attr('value', this.model.get("part1"));
+		return this;
+	},
+	unrender: function() {
+		$(this.el).remove();
+	},
+	remove: function() {
+		this.model.destroy();
+	},
+});
+
+var ItemDiv = Backbone.View.extend({
+	tagName : 'div',
+	events: {
+	   'click li span.delete': 'remove',
+	},
+	initialize: function() {
+		_.bindAll(this, 'render', 'unrender', 'remove');
+		this.model.bind('remove', this.unrender);
+	},
+	render: function() {
+	    var itemView = new ItemView({
+		model: this.model		
+ 		});
+	    var itemInput = new ItemInput({
+		model: this.model		
+ 		});
+		$(this.el).append(itemView.render().el);
+		$(this.el).append(itemInput.render().el);
+		return this;
+	},
+	unrender: function() {
+		$(this.el).remove();
+	},
+	remove: function() {
+		this.model.destroy();
+	},
 });
 
   var ListView = Backbone.View.extend({
@@ -100,10 +153,10 @@ var ItemView = Backbone.View.extend({
 		this.collection.add(item);
 	},
 	appendItem: function(item){
-	    var itemView = new ItemView({
+	    var itemDiv = new ItemDiv({
 		model: item		
  		});
-		$('ul', this.el).append(itemView.render().el);
+		$('ul', this.el).append(itemDiv.render().el);
 	}
 	
 	});
