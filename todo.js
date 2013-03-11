@@ -9,7 +9,8 @@ var Domlabel = Backbone.Model.extend({
 		headingText: "To Do List",
 		placeholder: "What do you want to do ?",
 		title: 'To-Do',
-		buttonText: 'add'	
+		buttonAddText: 'add',
+		buttonSaveText: 'save'
 	}	
 	});
   var Item = Backbone.Model.extend({
@@ -118,6 +119,7 @@ var ItemDiv = Backbone.View.extend({
 	el: $('body'),
 	events: {
 		'click button#add' : 'addItem',
+		'click button#save' : 'saveItem',
                  'keyup input#todo' : 'addToDo'
 	},
 	initialize: function(){
@@ -126,15 +128,16 @@ var ItemDiv = Backbone.View.extend({
           this.label= new Domlabel();  
 	  this.collection = new List();
 	  this.collection.bind('add', this.appendItem);
-
+	  this.collection.bind('save', this.saveItem);
 	  this.counter = 0;
 	  this.render();
 	},
 	render: function(){
 	  var self = this;
 	  $(this.el).append('<h2>' + this.label.get('headingText') + '</h2>');
-          $(this.el).append('<input id="todo" name="todo" title=' + this.label.get('title') + ' placeholder='+ this.label.get('placeholder') +'/>');
-	  $(this.el).append('<button id="add">' + this.label.get('buttonText') + '</button>');
+      $(this.el).append('<input id="todo" name="todo" title=' + this.label.get('title') + ' placeholder='+ this.label.get('placeholder') +'/>');
+	  $(this.el).append('<button id="add">' + this.label.get('buttonAddText') + '</button>');
+ 	  $(this.el).append('<button id="save">' + this.label.get('buttonSaveText') + '</button>');
 	  $(this.el).append('<ul></ul>');	
 	  _(this.collection.models).each(function(item){
 			self.appendItem(item);		
@@ -142,6 +145,13 @@ var ItemDiv = Backbone.View.extend({
 	},
 	addToDo: function(event){
 		if(event.which == 13) this.addItem();
+	},
+	saveItem: function(){
+		var saveString = " ";
+		for(var i=0; i< this.collection.models.length; i++) {
+			saveString = saveString + this.collection.models[i].get("part1") + "\n";
+		}
+		alert(saveString);
 	},
 	addItem: function(){
 		this.counter++;
