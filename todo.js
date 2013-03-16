@@ -178,11 +178,11 @@ var ItemDiv = Backbone.View.extend({
 		if(event.which == 13) this.addItem();
 	},
 	saveItem: function(){
-		var saveString = " ";
+		var saveString = new Array();
 		for(var i=0; i< this.collection.models.length; i++) {
-			saveString = saveString + this.collection.models[i].get("part1") + "\n";
+			saveString[i] = this.collection.models[i].get("part1");
 		}
-		alert(saveString);
+		this.options["saveItem"](saveString);
 	},
 	addItem: function(){
 		this.counter++;
@@ -201,5 +201,11 @@ var ItemDiv = Backbone.View.extend({
 	}
 	
 	});
-var toDoListView = new ToDoListView();
+var toDoListView = new ToDoListView({"saveItem" : function(itemCollection) {
+		var saveString = "Save Items : \n";
+		for(var i=0; i< itemCollection.length; i++) {
+			saveString = saveString + itemCollection[i] + "\n";
+		}
+		alert(saveString);
+}});
 });
