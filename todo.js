@@ -4,6 +4,9 @@ $(function(){
   success();
 }
 
+/**
+* Domlabel : labels to display in the html page 
+*/
 var Domlabel = Backbone.Model.extend({
 	defaults: {
 		headingText: "To Do List",
@@ -12,26 +15,44 @@ var Domlabel = Backbone.Model.extend({
 		buttonAddText: 'add',
 		buttonSaveText: 'save'
 	}	
-	});
-  var Item = Backbone.Model.extend({
-            defaults: {
-	      part1: 'Add to do list',
-	      domstart: '',
-	      domend: '',
-	      status: false 
-              }
-  });
+});
 
+/**
+* Item : to-do list item label content
+* maintain the list of content 
+*/
+var Item = Backbone.Model.extend({
+    defaults: {
+      part1: 'Add to do list',
+      domstart: '',
+      domend: '',
+      status: false 
+    }
+});
+
+/**
+* ItemListName : to-do list 
+* name
+*/
 var ItemListName = Backbone.Model.extend({
 		defaults: {
 		  nameValue: "todoItem",
 		  visible: false
 		}
-	});
-  var List = Backbone.Collection.extend({
-	model: Item	
-  });
+});
 
+/**
+* List : to-do list item  content
+* collection list li 
+*/
+var List = Backbone.Collection.extend({
+	model: Item	
+});
+
+/**
+*	ItemView : to-do list view collections
+*   li tag
+*/
 var ItemView = Backbone.View.extend({
 	tagName: 'li',
 	events: {
@@ -66,6 +87,9 @@ var ItemView = Backbone.View.extend({
 	}	
 });
 
+/**
+* ItemInput : input element tag used to save item as to-do list
+*/
 var ItemInput = Backbone.View.extend({
 	tagName : 'input',
 	initialize: function() {
@@ -87,6 +111,10 @@ var ItemInput = Backbone.View.extend({
 	},
 });
 
+/**
+*	ItemDiv : Div element used as list content
+*
+*/
 var ItemDiv = Backbone.View.extend({
 	tagName : 'div',
 	events: {
@@ -115,7 +143,10 @@ var ItemDiv = Backbone.View.extend({
 	},
 });
 
-  var ListView = Backbone.View.extend({
+/**
+*	ToDoListView : to-do list dom view
+*/
+  var ToDoListView = Backbone.View.extend({
 	el: $('body'),
 	events: {
 		'click button#add' : 'addItem',
@@ -170,5 +201,5 @@ var ItemDiv = Backbone.View.extend({
 	}
 	
 	});
-var listView = new ListView();
+var toDoListView = new ToDoListView();
 });
